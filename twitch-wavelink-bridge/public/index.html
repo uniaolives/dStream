@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Twitch Wavelink Visualiser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'https://cdn.skypack.dev/three@0.158';
+const ctx = new AudioContext();
+const analyser = ctx.createAnalyser();
+analyser.fftSize = 256;
+const data = new Uint8Array(analyser.frequencyBinCount);
+
+// receive UDP FFT from bridge.py
+const udp = new WebSocket(`ws://${location.hostname}:8081`); // websocket wrapper for UDP
+udp.onmessage = e => { const f = JSON.parse(e.data); for(let i=0;i<f.length;i++) data[i]=f[i]; };
+
+// Three.js wireframe plane that reacts to FFT
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'),antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+const geom = new THREE.PlaneGeometry(4,2,128,1);
+const mat = new THREE.MeshBasicMaterial({color:0xff00ff,wireframe:true});
+const mesh = new THREE.Mesh(geom,mat);
+scene.add(mesh); camera.position.z=3;
+function animate(){
+  requestAnimationFrame(animate);
+  const verts = geom.attributes.position.array;
+  for(let i=0;i<verts.length;i+=3) verts[i+1] = data[i]/512;
+  geom.attributes.position.needsUpdate = true;
+  renderer.render(scene,camera);
+}
+animate();
+</script>
+</body>
+</html>
