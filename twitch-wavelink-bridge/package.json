@@ -1,0 +1,8 @@
+{
+  "name": "twitch-wavelink-bridge",
+  "version": "1.0.0",
+  "description": "A real-time audio visualizer for Twitch streams using OBS and Elgato Wave Link.",
+  "author": "",
+  "license": "MIT",
+  "private": true
+}
