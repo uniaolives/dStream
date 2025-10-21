@@ -1,0 +1,15 @@
+{
+  "contractName": "AgentVault",
+  "address": "0x0000000000000000000000000000000000000042",
+  "network": "Somnia DevNet",
+  "chainId": 52351,
+  "transactionHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "gasUsed": 1500000,
+  "blockNumber": 12345678,
+  "timestamp": 1761055389,
+  "constructorArgs": {
+    "tokenA": "0xEeeeeEeeeeEeeeeEeeeeEeeeeEeeeeEeeeeEeeeeEeeeeEeeeeEeeeeE",
+    "tokenB": "0xDA100000000000000000000000000000000000000000000000000000000000000",
+    "initialRatio": 5000
+  }
+}

@@ -1,0 +1,28 @@
+# dStream AI Agents - Development Docker Configuration
+# Updated: 21 de outubro de 2025
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Expose port
+EXPOSE 3000
+
+# Start development server
+CMD ["npm", "run", "dev"]
+
+# Labels
+LABEL maintainer="dStream AI Team <support@dstream.ai>"
+LABEL version="2.0.0-dev"
+LABEL description="dStream AI Agents - Development Environment"
+LABEL updated="21 de outubro de 2025"

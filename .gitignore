@@ -1,49 +1,110 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# testing
-/coverage
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# OS
 .DS_Store
-*.pem
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# debug
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+lerna-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# vercel
-.vercel
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-local-*
-.claude
-.z-ai-config
-dev.log
-test
-prompt
+# nyc test coverage
+.nyc_output
 
-server.log
+# Foundry
+cache/
+out/
+lib/
+
+# Docker
+.dockerignore
+
+# Private keys and sensitive data
+private_keys/
+secrets/
+*.pem
+*.key
+
+# Build artifacts
+build/
+dist/
+*.tgz
+*.tar.gz
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Gas snapshots
+*.gas-snapshot
+
+# Hardhat files
+cache/
+artifacts/
+typechain-types/
+
+# Brownie
+build/
+brownie/
+
+# Ape
+cache/
+build/
+.ape/
+
+# Test results
+test-results/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
