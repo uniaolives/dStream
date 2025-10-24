@@ -1,62 +1,36 @@
-// server.ts - Next.js Standalone + Socket.IO
-// dStream AI Agents - Production Server
-// Updated: 21 de outubro de 2025
-// Version: 2.0.0
+// server.ts
+import { createServer } from 'http'
+import { parse } from 'url'
+import next from 'next'
+import { Server } from 'socket.io'
 
-import { setupSocket } from '@/lib/socket';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
-import next from 'next';
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({ dev })
+const handle = app.getRequestHandler()
 
-const dev = process.env.NODE_ENV !== 'production';
-const currentPort = 3000;
-const hostname = '127.0.0.1';
+app.prepare().then(() => {
+  const server = createServer((req, res) => {
+    const parsedUrl = parse(req.url!, true)
+    handle(req, res, parsedUrl)
+  }).listen(3000, () => {
+    console.log('> Ready on http://localhost:3000')
+  })
 
-// Custom server with Socket.IO integration
-async function createCustomServer() {
-  try {
-    // Create Next.js app
-    const nextApp = next({ 
-      dev,
-      dir: process.cwd(),
-      // In production, use the current directory where .next is located
-      conf: dev ? undefined : { distDir: './.next' }
-    });
+  const io = new Server(server)
 
-    await nextApp.prepare();
-    const handle = nextApp.getRequestHandler();
+  io.on('connection', (socket) => {
+    console.log('a user connected')
 
-    // Create HTTP server that will handle both Next.js and Socket.IO
-    const server = createServer((req, res) => {
-      // Skip socket.io requests from Next.js handler
-      if (req.url?.startsWith('/api/socketio')) {
-        return;
-      }
-      handle(req, res);
-    });
+    socket.on('agent-status', (msg) => {
+      io.emit('agent-status', msg)
+    })
 
-    // Setup Socket.IO
-    const io = new Server(server, {
-      path: '/api/socketio',
-      cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-      }
-    });
+    socket.on('task-update', (msg) => {
+      io.emit('task-update', msg)
+    })
 
-    setupSocket(io);
-
-    // Start the server
-    server.listen(currentPort, hostname, () => {
-      console.log(`> Ready on http://${hostname}:${currentPort}`);
-      console.log(`> Socket.IO server running at ws://${hostname}:${currentPort}/api/socketio`);
-    });
-
-  } catch (err) {
-    console.error('Server startup error:', err);
-    process.exit(1);
-  }
-}
-
-// Start the server
-createCustomServer();
+    socket.on('disconnect', () => {
+      console.log('user disconnected')
+    })
+  })
+})
